@@ -1,4 +1,7 @@
-#include "main.h"
+#include "shell.h"
+#include <string.h>
+#include <unistd.h>
+#include <stdlib.h>
 
 /**
  * get_input - to line of data
@@ -8,15 +11,13 @@
 
 ssize_t get_input(itr_r *itr)
 {
-size_t i, j, len;
-ssize_t s;
-char *ch;
-char **bufer, *p;
-*bufer = &(itr->arr);
-s = 0;
+static size_t i = 0, j, len;
+ssize_t r;
+static char *ch;
+char **bufer = &(itr->arg), *p;
 _putchar(BUF_FLUSH);
-s = input_buf(itr, &ch, &len);
-if (s == -1)
+r = _input_buf(itr, &ch, &len);
+if (r < 0)
 return (-1);
 if (len)
 {
@@ -41,7 +42,7 @@ itr->cmd_buf_type = CMD_NORM;
 return (_strlen(p));
 }
 *bufer = ch;
-return (s);
+return (r);
 }
 
 /**
@@ -53,31 +54,32 @@ return (s);
  */
 int _getline(itr_r *itr, char **ptr, size_t *length)
 {
-static char buf[READ_BUF_SIZE];
-static size_t i, len;
+char buf[READ_BUF_SIZE];
+size_t i = 0, len = 0;
 size_t k;
 ssize_t r = 0, s = 0;
-char *p = NULL, *new_p = NULL, *c;
+char *p = NULL, *pp = NULL, *c;
 p = *ptr;
 if (p && length)
 s = *length;
 if (i == len)
-i = len = 0;
+i = 0;
+len = 0;
 r = read_buf(itr, buf, &len);
 if (r == -1 || (r == 0 && len == 0))
 return (-1);
 c = _strchr(buf + i, '\n');
 k = c ? 1 + (unsigned int)(c - buf) : len;
-new_p = _realloc(p, s, s ? s + k : k + 1);
-if (!new_p)
+pp = _realloc(p, s, s ? s + k : k + 1);
+if (!pp)
 return (p ? free(p), -1 : -1);
 if (s)
-_strncat(new_p, buf + i, k - i);
+_strncat(pp, buf + i, k - i);
 else
-_strncpy(new_p, buf + i, k - i + 1);
+_strncpy(pp, buf + i, k - i + 1);
 s += k - i;
 i = k;
-p = new_p;
+p = pp;
 if (length)
 *length = s;
 *ptr = p;
@@ -94,7 +96,7 @@ return (s);
 ssize_t _input_buf(itr_r *itr, char **buf, size_t *len)
 {
 ssize_t siz;
-size_t length;
+size_t length = 0;
 siz = 0;
 if (!*len)
 {
@@ -111,10 +113,10 @@ if (siz > 0)
 {
 if ((*buf)[siz - 1] == '\n')
 {
-(*buf)[r - 1] = '\0';
+(*buf)[siz - 1] = '\0';
 siz--;
 }
-itr.count_line = 1;
+(*itr).line_count = 1;
 remove_comments(*buf);
 build_history_list(itr, *buf, itr->histcount++);
 {
@@ -125,7 +127,6 @@ itr->cmd_buf = buf;
 }
 return (siz);
 }
-
 /**
  * read_buf - reads a buffer
  * @itr: parameter struct
@@ -135,14 +136,13 @@ return (siz);
  */
 ssize_t read_buf(itr_r *itr, char *buf, size_t *i)
 {
-ssize_t s;
-s = 0;
+ssize_t n = 0;
 if (*i)
 return (0);
-s = read(info->readfd, buf, READ_BUF_SIZE);
-if (r >= 0)
-*i = s;
-return (s);
+n = read(itr->readfd, buf, READ_BUF_SIZE);
+if (n >= 0)
+*i = n;
+return (n);
 }
 
 /**
@@ -152,7 +152,11 @@ return (s);
 */
 void sigintHandler(__attribute__((unused))int n)
 {
-_puts("\n");
+while (1)
+{
 _puts("$ ");
-_putchar(BUF_FLUSH);
+_puts("Blinking\n");
+sleep(1);
+}
+return;
 }

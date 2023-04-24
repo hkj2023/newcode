@@ -179,7 +179,7 @@ int _putsfd(char *str, int fd)
 	return (i);
 }
 
-/* errors1.c */ code
+/* errors1.c */
 
 /**
  * _erratoi - converts a string to an integer
@@ -874,9 +874,7 @@ void free_list(list_t **head_ptr)
 }
 
 
-/*lists1.c code
-
-#include "shell.h" 8/
+/*lists1.c code #include "shell.h" */
 
 /**
  * list_len - determines length of linked list
@@ -1064,7 +1062,7 @@ void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
 	return (p);
 }
 
-/*shell_loop.c   #include "shell.h" 8?
+/*shell_loop.c   #include "shell.h" 8*/
 
 /**
  * hsh - main shell loop
@@ -1081,7 +1079,7 @@ int hsh(itr_r *itr, char **av)
 	while (r != -1 && builtin_ret != -2)
 	{
 		clear_itr(itr);
-		if (interactive(itr))
+		if (is_interactive(itr))
 			_puts("$ ");
 		_eputchar(BUF_FLUSH);
 		r = get_input(itr);
@@ -1092,13 +1090,13 @@ int hsh(itr_r *itr, char **av)
 			if (builtin_ret == -1)
 				find_cmd(itr);
 		}
-		else if (interactive(itr))
+		else if (is_interactive(itr))
 			_putchar('\n');
 		free_itr(itr, 0);
 	}
 	write_history(itr);
 	free_itr(itr, 1);
-	if (!interactive(itr) && itr->status)
+	if (!is_interactive(itr) && itr->status)
 		exit(itr->status);
 	if (builtin_ret == -2)
 	{
@@ -1174,7 +1172,7 @@ void find_cmd(itr_r *itr)
 	}
 	else
 	{
-		if ((interactive(itr) || _getenv(itr, "PATH=")
+		if ((is_interactive(itr) || _getenv(itr, "PATH=")
 					|| itr->argv[0][0] == '/') && is_cmd(itr, itr->argv[0]))
 			fork_cmd(itr);
 		else if (*(itr->arg) != '\n')
@@ -1322,7 +1320,7 @@ char **strtow2(char *str, char d)
 }
 
 
-/* vars.c 8?
+/* vars.c 8*/
 
 /**
  * is_chain - test if current char in buffer is a chain delimeter

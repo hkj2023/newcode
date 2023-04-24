@@ -55,7 +55,7 @@ return (add_node_end(&(itr->alias), str, 0) == NULL);
  * @node: node
  * Return: Always 0 (Success)
  */
-int print_alias(itr_r *node)
+int print_alias(list_t *node)
 {
 char *p = NULL, *a = NULL;
 if (node)

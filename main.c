@@ -11,8 +11,8 @@ int main(int ac, char **av)
 {
 itr_r itr[] = {ITR_INIT};
 int fd = 2;
-if (ac == NULL)
-return (NULL);
+if (av == NULL)
+return (-1);
 if (ac == 2)
 {
 fd = open(av[1], O_RDONLY);

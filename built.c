@@ -39,7 +39,7 @@ int chdir_ret;
 s = getcwd(buffer, 1024);
 if (!s)
 _puts("TODO: >>getcwd failure emsg here<<\n");
-if (!info->argv[1])
+if (!itr->argv[1])
 {
 dir = _getenv(itr, "HOME=");
 if (!dir)
@@ -57,7 +57,7 @@ return (1);
 }
 _puts(_getenv(itr, "OLDPWD=")), _putchar('\n');
 chdir_ret = /* TODO: what should this be? */
-chdir((dir = _getenv(info, "OLDPWD=")) ? dir : "/");
+chdir((dir = _getenv(itr, "OLDPWD=")) ? dir : "/");
 }
 else
 chdir_ret = chdir(itr->argv[1]);
@@ -68,7 +68,7 @@ _eputs(itr->argv[1]), _eputchar('\n');
 }
 else
 {
-_setenv(info, "OLDPWD", _getenv(itr, "PWD="));
+_setenv(itr, "OLDPWD", _getenv(itr, "PWD="));
 _setenv(itr, "PWD", getcwd(buffer, 1024));
 }
 return (0);

@@ -41,13 +41,13 @@ int i, sign, result;
 sign = 1;
 result = 1;
 i = 0;
-if (c[0] == "-")
+if (c[0] == '-')
 {
-sig = -1;
+sign = -1;
 i++;
 }
 for (; c[i] != '\0'; i++)
-result = result * 10 + c[i] - '0');
+result = result * (10 + c[i] - '0');
 return (sign *result);
 }
 

@@ -1,5 +1,5 @@
-#ifndef _SHELL_H_
-#define _SHELL_H_
+#ifndef SHELL_H
+#define SHELL_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -85,7 +85,7 @@ typedef struct sendmessages
 	int histcount;
 } itr_r;
 
-#define INFO_INIT \
+#define ITR_INIT \
 {NULL, NULL, NULL, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, \
 	0, 0, 0}
 
@@ -97,10 +97,13 @@ typedef struct sendmessages
 typedef struct builtin
 {
 char *type;
-int (*func)(itr_r *);
+int (*func)(itr_r *itr);
 } builtin_table;
 
-int hsh(info_t *, char **);
+ssize_t read_buf(itr_r *itr, char *buf, size_t *i);
+ssize_t _input_buf(itr_r *itr, char **buf, size_t *len);
+
+int hsh(itr_r *, char **);
 int find_builtin(itr_r *);
 void find_cmd(itr_r *);
 void fork_cmd(itr_r *);
@@ -141,7 +144,7 @@ int _isalpha(int);
 int my_atoi(char *);
 
 int _erratoi(char *);
-void print_error(info_t *, char *);
+void print_error(itr_r *, char *);
 int print_d(int, int);
 char *convert_number(long int, int, int);
 void remove_comments(char *);
@@ -156,9 +159,9 @@ ssize_t get_input(itr_r *);
 int _getline(itr_r *, char **, size_t *);
 void sigintHandler(int);
 
-void clear_info(itr_r *);
-void set_info(itr_r *, char **);
-void free_info(itr_r *, int);
+void clear_itr(itr_r *);
+void set_itr(itr_r *, char **);
+void free_itr(itr_r *, int);
 char *_getenv(itr_r *, const char *);
 int _myenv(itr_r *);
 int _mysetenv(itr_r *);
@@ -194,3 +197,4 @@ int replace_vars(itr_r *);
 int replace_string(char **, char *);
 
 #endif
+
